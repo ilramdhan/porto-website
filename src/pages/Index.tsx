@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
 import { useEffect, useMemo, useState } from "react";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const fadeIn = {
   hidden: { opacity: 0, y: 16 },
@@ -93,6 +94,30 @@ const projects = [
   },
 ];
 
+const articles = [
+  {
+    title: "Mendesain arsitektur scalable untuk aplikasi SaaS",
+    summary: "Prinsip dan trade-off dalam membangun multi-tenant SaaS yang efisien.",
+    date: "2025-05-01",
+    tags: ["Arsitektur", "SaaS", "PostgreSQL"],
+    link: "#",
+  },
+  {
+    title: "Optimasi performa React: dari profil hingga caching",
+    summary: "Strategi nyata menaikkan Core Web Vitals tanpa mengorbankan DX.",
+    date: "2025-04-12",
+    tags: ["React", "Perf", "Caching"],
+    link: "#",
+  },
+  {
+    title: "Workflow DevOps ringan untuk tim kecil",
+    summary: "Membangun CI/CD yang andal, observability, dan praktik rilis yang aman.",
+    date: "2025-03-22",
+    tags: ["DevOps", "CI/CD", "Observability"],
+    link: "#",
+  },
+];
+
 const experiences = [
   {
     company: "TechNova Studio",
@@ -169,6 +194,24 @@ const Index = () => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            articles.map((a) => ({
+              "@context": "https://schema.org",
+              "@type": "BlogPosting",
+              headline: a.title,
+              datePublished: a.date,
+              author: { "@type": "Person", name: "Ilham Ramadhan" },
+              url:
+                typeof window !== "undefined"
+                  ? `${window.location.origin}${a.link}`
+                  : `https://ilhamramadhan.dev${a.link}`,
+            }))
+          ),
+        }}
+      />
 
       {/* Header / Navbar */}
       <header className="sticky top-0 z-40 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
@@ -189,6 +232,7 @@ const Index = () => {
           <div className="flex items-center gap-2">
             <SocialLink href="https://github.com/yourusername" label="GitHub" icon={Github} />
             <SocialLink href="https://www.linkedin.com/in/yourusername/" label="LinkedIn" icon={Linkedin} />
+            <ThemeToggle />
             <Button
               className="hidden md:inline-flex"
               onClick={copyEmail}
@@ -246,18 +290,18 @@ const Index = () => {
             </motion.div>
 
             <motion.div variants={fadeIn} className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3">
-              <div className="rounded-lg border border-border p-4">
+              <motion.div whileHover={{ y: -4, scale: 1.01 }} transition={{ type: "spring", stiffness: 260, damping: 18 }} className="rounded-lg border border-border p-4">
                 <div className="mb-2 flex items-center gap-2 text-sm font-medium"><Cpu className="h-4 w-4 text-primary" /> Backend kuat</div>
                 <p className="text-sm text-muted-foreground">API berskala, aman, dan terukur.</p>
-              </div>
-              <div className="rounded-lg border border-border p-4">
+              </motion.div>
+              <motion.div whileHover={{ y: -4, scale: 1.01 }} transition={{ type: "spring", stiffness: 260, damping: 18 }} className="rounded-lg border border-border p-4">
                 <div className="mb-2 flex items-center gap-2 text-sm font-medium"><Layers className="h-4 w-4 text-primary" /> Frontend modern</div>
                 <p className="text-sm text-muted-foreground">UI halus, aksesibel, dan reaktif.</p>
-              </div>
-              <div className="rounded-lg border border-border p-4 sm:col-span-1 col-span-2">
+              </motion.div>
+              <motion.div whileHover={{ y: -4, scale: 1.01 }} transition={{ type: "spring", stiffness: 260, damping: 18 }} className="rounded-lg border border-border p-4 sm:col-span-1 col-span-2">
                 <div className="mb-2 flex items-center gap-2 text-sm font-medium"><Code2 className="h-4 w-4 text-primary" /> DevOps siap produksi</div>
                 <p className="text-sm text-muted-foreground">CI/CD, observability, dan kinerja optimal.</p>
-              </div>
+              </motion.div>
             </motion.div>
           </motion.div>
         </div>
@@ -299,7 +343,7 @@ const Index = () => {
               <h3 className="mb-4 text-lg font-semibold">{group}</h3>
               <div className="flex flex-wrap gap-2">
                 {list.map((skill) => (
-                  <Badge key={skill} variant="secondary">{skill}</Badge>
+                  <Badge key={skill} variant="secondary" className="hover-scale">{skill}</Badge>
                 ))}
               </div>
             </motion.div>
@@ -359,6 +403,8 @@ const Index = () => {
             <motion.article
               key={p.title}
               variants={fadeIn}
+              whileHover={{ y: -6, scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
               className="group relative overflow-hidden rounded-xl border border-border"
             >
               <div className="aspect-[16/10] bg-gradient-to-br from-primary/10 to-[hsl(var(--primary-glow)/0.15)]" />
@@ -373,6 +419,48 @@ const Index = () => {
                 <div className="mt-4">
                   <a href={p.link} className="inline-flex items-center gap-1 text-sm text-foreground/80 hover:text-primary transition-colors" target="_blank" rel="noreferrer">
                     Lihat proyek <ExternalLink className="h-4 w-4" />
+                  </a>
+                </div>
+              </div>
+            </motion.article>
+          ))}
+        </motion.div>
+      </section>
+
+      {/* Articles */}
+      <section id="articles" className="container py-20">
+        <SectionHeader
+          eyebrow="Artikel"
+          title="Tulisan & pemikiran"
+          description="Kumpulan artikel seputar engineering, arsitektur, dan produktivitas."
+        />
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.15 }}
+          variants={staggerContainer}
+          className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+        >
+          {articles.map((a) => (
+            <motion.article
+              key={a.title}
+              variants={fadeIn}
+              whileHover={{ y: -6, scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              className="group relative overflow-hidden rounded-xl border border-border"
+            >
+              <div className="p-5">
+                <div className="text-xs text-muted-foreground">{a.date}</div>
+                <h3 className="mt-2 text-lg font-semibold group-hover:text-primary transition-colors">{a.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{a.summary}</p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {a.tags.map((t: string) => (
+                    <Badge key={t} variant="outline">{t}</Badge>
+                  ))}
+                </div>
+                <div className="mt-4">
+                  <a href={a.link} className="inline-flex items-center gap-1 text-sm text-foreground/80 hover:text-primary transition-colors" target="_blank" rel="noreferrer">
+                    Baca artikel <ExternalLink className="h-4 w-4" />
                   </a>
                 </div>
               </div>
